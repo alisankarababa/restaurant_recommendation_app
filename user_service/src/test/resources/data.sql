@@ -8,8 +8,8 @@ values
 
 insert into review (id, user_id, restaurant_id, created_date, last_modified_date, rate, comment)
 values
-    (2000, 1000, 3001, '2024-03-08 10:00:00', '2024-03-08 10:00:00', 'ONE', 'Excellent service!'),
-    (2001, 1000, 3002, '2024-03-08 11:30:00', '2024-03-08 11:45:00', 'FOUR','Good food, but service could be better'),
-    (2002, 1000, 3003, '2024-03-08 12:45:00', '2024-03-08 13:15:00', 'THREE', 'Average experience'),
-    (2003, 1000, 3004, '2024-03-08 14:00:00', '2024-03-08 14:30:00', 'FIVE', 'Amazing food and service!'),
-    (2004, 1000, 3005, '2024-03-08 15:20:00', '2024-03-08 16:00:00', 'TWO', 'Disappointing meal');
+    (2000, 1000, '0f263a34-36c6-4884-b6a6-26a260cf85fa', '2024-03-08 10:00:00', '2024-03-08 10:00:00', 'ONE', 'Excellent service!'),
+    (2001, 1000, '401e67d6-de9b-4331-8040-a63129b42a84', '2024-03-08 11:30:00', '2024-03-08 11:45:00', 'FOUR','Good food, but service could be better'),
+    (2002, 1000, '581c6536-a89f-4174-89a3-d18d787e5273', '2024-03-08 12:45:00', '2024-03-08 13:15:00', 'THREE', 'Average experience'),
+    (2003, 1000, 'dfb1721c-62df-4f5b-afbb-585bb49d66ce', '2024-03-08 14:00:00', '2024-03-08 14:30:00', 'FIVE', 'Amazing food and service!'),
+    (2004, 1000, '41094400-df4b-43f9-be3f-b51a5aac801b', '2024-03-08 15:20:00', '2024-03-08 16:00:00', 'TWO', 'Disappointing meal');
