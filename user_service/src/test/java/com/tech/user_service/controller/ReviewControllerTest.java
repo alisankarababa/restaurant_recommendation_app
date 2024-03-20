@@ -1,16 +1,12 @@
 package com.tech.user_service.controller;
 
 import com.tech.common.dto.RestaurantDto;
+import com.tech.common.enums.eRate;
+import com.tech.common.response.RestResponse;
+import com.tech.user_service.client.IRestaurantService;
 import com.tech.user_service.dto.ReviewDto;
-import com.tech.user_service.entity.Review;
-import com.tech.user_service.entity.User;
 import com.tech.user_service.faker.FakeRestaurantDto;
-import com.tech.user_service.faker.FakeReview;
-import com.tech.user_service.faker.FakeReviewDto;
-import com.tech.user_service.faker.FakeUser;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
-import com.tech.user_service.request_body.ReviewUpdateRequestBody;
-import com.tech.user_service.service.IReviewService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -18,7 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -31,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ReviewControllerTest extends ControllerTest {
 
     @MockBean
-    IReviewService reviewService;
+    IRestaurantService restaurantService;
 
     @Autowired
     public ReviewControllerTest(WebApplicationContext context) {
@@ -43,19 +41,18 @@ class ReviewControllerTest extends ControllerTest {
     void shouldSave() throws Exception {
 
         RestaurantDto restaurantDto = FakeRestaurantDto.getSingleData();
-        User user = FakeUser.getSingleData();
-        Review review = FakeReview.getSingleData();
-
 
         ReviewSaveRequestBody reviewSaveRequestBody = new ReviewSaveRequestBody(
-                user.getId(),
+                1000L,
                 restaurantDto.id(),
-                review.getRate(),
-                review.getComment()
+                eRate.TWO,
+                "shouldSave Test Comment"
         );
 
-        Mockito.when( reviewService.save( Mockito.any(ReviewSaveRequestBody.class) ) )
-                .thenReturn( FakeReviewDto.getSingleData() );
+        Mockito.when( restaurantService.rate( Mockito.anyString(), Mockito.any( eRate.class) ) )
+                .thenReturn(
+                        new ResponseEntity<>( RestResponse.ok( restaurantDto ), HttpStatus.OK )
+                );
 
         String stringReviewSaveRequestBody = objectMapper.writeValueAsString( reviewSaveRequestBody );
 
