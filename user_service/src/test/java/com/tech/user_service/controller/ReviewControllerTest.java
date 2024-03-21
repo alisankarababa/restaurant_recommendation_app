@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -73,10 +74,31 @@ class ReviewControllerTest extends ControllerTest {
         assertEqualityForReviewRequestBodyAndReviewDtoFields( reviewSaveRequestBody, reviewDto );
     }
 
+    @Test
+    void shouldFindById() throws Exception {
+
+        Mockito.when( restaurantService.findById( Mockito.anyString() ) )
+                .thenReturn( new ResponseEntity<>(
+                    RestResponse.ok( FakeRestaurantDto.getSingleData() ),
+                        HttpStatus.OK
+                ) );
+
+        MvcResult mvcResult = mockMvc.perform( MockMvcRequestBuilders.get( "/reviews/2001" ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andReturn();
+
+        assertSuccessOnRestResponse( mvcResult );
+
+        ReviewDto restResponseData = getRestResponseData( mvcResult, ReviewDto.class );
+        assertNotNull( restResponseData );
+    }
+
     private static void assertEqualityForReviewRequestBodyAndReviewDtoFields(ReviewSaveRequestBody reqBody, ReviewDto reviewDto) {
         assertEquals( reqBody.userId(), reviewDto.user().id() );
         assertEquals( reqBody.restaurantId(), reviewDto.restaurant().id() );
         assertEquals( reqBody.rate(), reviewDto.rate() );
         assertEquals( reqBody.comment(), reviewDto.comment() );
     }
+
+
 }
