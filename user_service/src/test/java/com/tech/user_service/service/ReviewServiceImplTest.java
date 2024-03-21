@@ -21,6 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -68,6 +70,34 @@ class ReviewServiceImplTest {
         assertEqualityOnRestaurantDtoAndRestaurantDtoInReviewDto(restaurantDto, reviewDto);
         assertEquals( reviewSaveRequestBody.rate(), reviewDto.rate() );
         assertEquals( reviewSaveRequestBody.comment(), reviewDto.comment() );
+    }
+
+    @Test
+    void shouldGetReviewDtoByReviewId() {
+
+        Review review = FakeReview.getSingleData();
+        User user = FakeUser.getSingleData();
+        RestaurantDto restaurantDto = FakeRestaurantDto.getSingleData();
+
+
+        Mockito.when( reviewRepository.findById( Mockito.anyLong() ) )
+                .thenReturn( Optional.of( review ) );
+
+        Mockito.when( userService.findById( Mockito.anyLong() ) )
+                .thenReturn( user );
+
+        Mockito.when( restaurantService.findById( Mockito.anyString() ) )
+                .thenReturn( new ResponseEntity<>(
+                        RestResponse.ok( restaurantDto ),
+                        HttpStatus.OK
+                ) );
+
+        ReviewDto reviewDto = reviewServiceImpl.getReviewDtoByReviewId( review.getId() );
+
+        assertEqualityOnRestaurantDtoAndRestaurantDtoInReviewDto( restaurantDto, reviewDto );
+        assertEqualityOnUserAndUserDtoInReviewDto( user, reviewDto );
+        assertEquals( review.getRate(), reviewDto.rate() );
+        assertEquals( review.getComment(), reviewDto.comment() );
     }
 
     private void assertEqualityOnRestaurantDtoAndRestaurantDtoInReviewDto(RestaurantDto restaurantDto, ReviewDto reviewDto) {

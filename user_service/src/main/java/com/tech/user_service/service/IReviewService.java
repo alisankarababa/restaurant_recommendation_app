@@ -6,5 +6,5 @@ import com.tech.user_service.request_body.ReviewSaveRequestBody;
 
 public interface IReviewService extends IBaseEntityService<Review> {
     ReviewDto save(ReviewSaveRequestBody requestBody);
-
+    ReviewDto getReviewDtoByReviewId(long id);
 }

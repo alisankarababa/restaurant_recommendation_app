@@ -39,8 +39,29 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
         return IReviewMapper.INSTANCE.constructReviewDto( savedReview, user, restaurantDto );
     }
 
+    @Override
+    public ReviewDto getReviewDtoByReviewId(long id) {
+
+        Review review = this.getRepository().findById( id )
+                .orElseThrow(() -> new RuntimeException("cannot find review"));
+
+        User user = userService.findById( review.getUserId() );
+        RestaurantDto restaurantDto = getRestaurant( review.getRestaurantId() );
+
+        return IReviewMapper.INSTANCE.constructReviewDto( review, user, restaurantDto );
+    }
+
+    private RestaurantDto getRestaurant(String restaurantId) {
+        ResponseEntity<RestResponse<RestaurantDto>> restResponseResponseEntity = restaurantService.findById( restaurantId );
+        return getRestaurantDto( restResponseResponseEntity );
+    }
+
     private RestaurantDto conveyRateToRestaurantService(String restaurantId, eRate rate) {
         ResponseEntity<RestResponse<RestaurantDto>> responseEntity = restaurantService.rate( restaurantId, rate );
+        return getRestaurantDto( responseEntity );
+    }
+
+    private static RestaurantDto getRestaurantDto(ResponseEntity<RestResponse<RestaurantDto>> responseEntity) {
         RestResponse<RestaurantDto> body = responseEntity.getBody();
 
         if(body == null) {
