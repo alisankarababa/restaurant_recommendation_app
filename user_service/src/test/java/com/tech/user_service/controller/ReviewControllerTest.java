@@ -7,6 +7,7 @@ import com.tech.user_service.client.IRestaurantService;
 import com.tech.user_service.dto.ReviewDto;
 import com.tech.user_service.faker.FakeRestaurantDto;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
+import com.tech.user_service.request_body.ReviewUpdateRequestBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -50,7 +51,7 @@ class ReviewControllerTest extends ControllerTest {
                 "shouldSave Test Comment"
         );
 
-        Mockito.when( restaurantService.rate( Mockito.anyString(), Mockito.any( eRate.class) ) )
+        Mockito.when( restaurantService.rate( Mockito.anyString(), Mockito.any( eRate.class ) ) )
                 .thenReturn(
                         new ResponseEntity<>( RestResponse.ok( restaurantDto ), HttpStatus.OK )
                 );
@@ -79,7 +80,7 @@ class ReviewControllerTest extends ControllerTest {
 
         Mockito.when( restaurantService.findById( Mockito.anyString() ) )
                 .thenReturn( new ResponseEntity<>(
-                    RestResponse.ok( FakeRestaurantDto.getSingleData() ),
+                        RestResponse.ok( FakeRestaurantDto.getSingleData() ),
                         HttpStatus.OK
                 ) );
 
@@ -91,6 +92,23 @@ class ReviewControllerTest extends ControllerTest {
 
         ReviewDto restResponseData = getRestResponseData( mvcResult, ReviewDto.class );
         assertNotNull( restResponseData );
+    }
+
+    @Test
+    void shouldUpdate() throws Exception {
+
+        ReviewUpdateRequestBody reviewUpdateRequestBody = new ReviewUpdateRequestBody( eRate.FOUR, "It is a cozy place. I like the food." );
+        String stringReviewUpdateRequestBody = objectMapper.writeValueAsString( reviewUpdateRequestBody );
+
+        MvcResult mvcResult = mockMvc.perform( MockMvcRequestBuilders
+                        .put( "/reviews/2002" )
+                        .content( stringReviewUpdateRequestBody )
+                        .contentType( MediaType.APPLICATION_JSON )
+                )
+                .andExpect( MockMvcResultMatchers.status().isNoContent() )
+                .andReturn();
+
+        assertSuccessOnRestResponse( mvcResult );
     }
 
     @Test

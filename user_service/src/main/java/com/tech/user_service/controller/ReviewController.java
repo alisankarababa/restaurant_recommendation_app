@@ -3,6 +3,7 @@ package com.tech.user_service.controller;
 import com.tech.common.response.RestResponse;
 import com.tech.user_service.dto.ReviewDto;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
+import com.tech.user_service.request_body.ReviewUpdateRequestBody;
 import com.tech.user_service.service.IReviewService;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class ReviewController {
 
         ReviewDto reviewDto = reviewService.getReviewDtoByReviewId( id );
         return new ResponseEntity<>( RestResponse.ok( reviewDto ), HttpStatus.OK );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RestResponse<Void>> update(@PathVariable @Positive long id, @RequestBody @Valid ReviewUpdateRequestBody requestBody) {
+
+        reviewService.update(id, requestBody);
+        return new ResponseEntity<>( RestResponse.noContent(), HttpStatus.NO_CONTENT );
     }
 
     @DeleteMapping("{id}")
