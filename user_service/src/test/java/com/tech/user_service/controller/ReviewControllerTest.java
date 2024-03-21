@@ -93,12 +93,20 @@ class ReviewControllerTest extends ControllerTest {
         assertNotNull( restResponseData );
     }
 
+    @Test
+    void shouldDelete() throws Exception {
+
+        MvcResult mvcResult = mockMvc.perform( MockMvcRequestBuilders.delete( "/reviews/2003" ) )
+                .andExpect( MockMvcResultMatchers.status().isNoContent() )
+                .andReturn();
+
+        assertSuccessOnRestResponse( mvcResult );
+    }
+
     private static void assertEqualityForReviewRequestBodyAndReviewDtoFields(ReviewSaveRequestBody reqBody, ReviewDto reviewDto) {
         assertEquals( reqBody.userId(), reviewDto.user().id() );
         assertEquals( reqBody.restaurantId(), reviewDto.restaurant().id() );
         assertEquals( reqBody.rate(), reviewDto.rate() );
         assertEquals( reqBody.comment(), reviewDto.comment() );
     }
-
-
 }

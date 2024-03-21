@@ -39,4 +39,11 @@ public class ReviewController {
         ReviewDto reviewDto = reviewService.getReviewDtoByReviewId( id );
         return new ResponseEntity<>( RestResponse.ok( reviewDto ), HttpStatus.OK );
     }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<RestResponse<Void>> delete(@PathVariable @Positive long id) {
+
+        reviewService.deleteById( id );
+        return new ResponseEntity<>( RestResponse.noContent(), HttpStatus.NO_CONTENT );
+    }
 }
