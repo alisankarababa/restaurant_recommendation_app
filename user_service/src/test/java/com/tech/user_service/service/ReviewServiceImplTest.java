@@ -12,6 +12,7 @@ import com.tech.user_service.faker.FakeReview;
 import com.tech.user_service.faker.FakeUser;
 import com.tech.user_service.repository.IReviewRepository;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
+import com.tech.user_service.request_body.ReviewUpdateRequestBody;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -100,6 +101,23 @@ class ReviewServiceImplTest {
         assertEquals( review.getComment(), reviewDto.comment() );
     }
 
+    @Test
+    void shouldUpdate() {
+
+        Review review = FakeReview.getSingleData();
+        ReviewUpdateRequestBody reviewUpdateRequestBody = new ReviewUpdateRequestBody( eRate.FIVE, "Definitely recommend this place!!" );
+
+        Mockito.when( reviewRepository.findById( Mockito.anyLong() ) )
+                        .thenReturn( Optional.of( review ) );
+
+        reviewServiceImpl.update( review.getId(), reviewUpdateRequestBody );
+
+        assertEquals( reviewUpdateRequestBody.comment(), review.getComment() );
+        assertEquals( reviewUpdateRequestBody.rate(), review.getRate() );
+
+        Mockito.verify( reviewRepository).save( review );
+    }
+
     private void assertEqualityOnRestaurantDtoAndRestaurantDtoInReviewDto(RestaurantDto restaurantDto, ReviewDto reviewDto) {
 
         assertEquals( restaurantDto.id(), reviewDto.restaurant().id() );
@@ -117,4 +135,6 @@ class ReviewServiceImplTest {
         assertEquals( user.getLatitude(), reviewDto.user().latitude() );
         assertEquals( user.getLongitude(), reviewDto.user().longitude() );
     }
+
+
 }

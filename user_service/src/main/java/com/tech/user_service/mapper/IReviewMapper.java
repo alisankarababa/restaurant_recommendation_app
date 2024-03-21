@@ -5,8 +5,10 @@ import com.tech.user_service.dto.ReviewDto;
 import com.tech.user_service.entity.Review;
 import com.tech.user_service.entity.User;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
+import com.tech.user_service.request_body.ReviewUpdateRequestBody;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -27,4 +29,7 @@ public interface IReviewMapper {
     @Mapping(target = "restaurant", source = "restaurantDto")
     @Mapping(target = "rate", source =  "review.rate")
     ReviewDto constructReviewDto(Review review, User user, RestaurantDto restaurantDto);
+
+    @Mapping( target = "id", ignore = true)
+    void updateReviewFields(@MappingTarget Review review, ReviewUpdateRequestBody requestBody);
 }

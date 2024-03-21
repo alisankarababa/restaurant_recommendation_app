@@ -10,6 +10,7 @@ import com.tech.user_service.entity.User;
 import com.tech.user_service.mapper.IReviewMapper;
 import com.tech.user_service.repository.IReviewRepository;
 import com.tech.user_service.request_body.ReviewSaveRequestBody;
+import com.tech.user_service.request_body.ReviewUpdateRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,14 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
         RestaurantDto restaurantDto = getRestaurant( review.getRestaurantId() );
 
         return IReviewMapper.INSTANCE.constructReviewDto( review, user, restaurantDto );
+    }
+
+    @Override
+    public void update(long id, ReviewUpdateRequestBody requestBody) {
+
+        Review review = findById( id );
+        IReviewMapper.INSTANCE.updateReviewFields(review, requestBody);
+        save( review );
     }
 
     private RestaurantDto getRestaurant(String restaurantId) {
