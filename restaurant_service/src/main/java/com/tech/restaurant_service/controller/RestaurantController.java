@@ -79,4 +79,12 @@ public class RestaurantController {
         RestaurantDto restaurantDto = IRestaurantMapper.INSTANCE.restaurantToRestaurantDto( restaurant );
         return new ResponseEntity<>( RestResponse.ok( restaurantDto ), HttpStatus.OK );
     }
+
+    @GetMapping("/recommended")
+    public ResponseEntity<RestResponse<List<RestaurantDto>>> recommendRestaurants(@RequestParam double lat, @RequestParam double lon) {
+
+        List<Restaurant> restaurantList = restaurantService.recommendRestaurants( lat, lon );
+        List<RestaurantDto> restaurantDtoList = IRestaurantMapper.INSTANCE.restaurantListToRestaurantDtoList( restaurantList );
+        return new ResponseEntity<>( RestResponse.ok( restaurantDtoList ), HttpStatus.OK );
+    }
 }

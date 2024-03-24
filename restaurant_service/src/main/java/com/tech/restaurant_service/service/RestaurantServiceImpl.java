@@ -4,6 +4,9 @@ import com.tech.common.enums.eRate;
 import com.tech.restaurant_service.entity.Restaurant;
 import com.tech.restaurant_service.repository.IRestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -74,5 +77,17 @@ public class RestaurantServiceImpl implements IRestaurantService {
         restaurant.setAccumulatedRating( accumulatedRating - oldRate.getRate() + newRate.getRate() );
 
         return save( restaurant );
+    }
+
+    @Override
+    public List<Restaurant> recommendRestaurants(double lat, double lon) {
+
+        Page<Restaurant> result = restaurantRepository.recommendRestaurants(
+                lat,
+                lon,
+                PageRequest.of(0, 3, Sort.by("_score").descending() )
+        );
+
+        return result.stream().toList();
     }
 }

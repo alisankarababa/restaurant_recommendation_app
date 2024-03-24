@@ -12,4 +12,5 @@ public interface IRestaurantService {
     void deleteById(String id);
     Restaurant rate(String id, eRate rate);
     Restaurant updateRate(String id, eRate oldRate, eRate newRate);
+    List<Restaurant> recommendRestaurants(double lat, double lon);
 }
