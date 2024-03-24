@@ -1,13 +1,15 @@
 package com.tech.user_service.service;
 
+import com.tech.user_service.exception.BaseEntityNotFoundException;
 import com.tech.user_service.faker.ConcreteBaseEntity;
 import com.tech.user_service.faker.FakeConcreteBaseEntity;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,8 +22,13 @@ class BaseEntityServiceImplTest {
     @Mock
     private JpaRepository<ConcreteBaseEntity, Long> repository;
 
-    @InjectMocks
     private BaseEntityServiceImpl<ConcreteBaseEntity, JpaRepository<ConcreteBaseEntity, Long>> baseEntityService;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.initMocks(this);
+        baseEntityService = new BaseEntityServiceImpl<>(repository, ConcreteBaseEntity.class);
+    }
 
     @Test
     void shouldSave() {
@@ -84,8 +91,7 @@ class BaseEntityServiceImplTest {
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         //then
-        //TODO change RuntimeException.class when dedicated exception class is created
-        Assertions.assertThrows(RuntimeException.class, () -> baseEntityService.findById(35));
+        Assertions.assertThrows( BaseEntityNotFoundException.class, () -> baseEntityService.findById(35));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.tech.user_service.service;
 
 import com.tech.user_service.entity.BaseEntity;
+import com.tech.user_service.exception.BaseEntityNotFoundException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,10 +13,12 @@ import java.util.Optional;
 public class BaseEntityServiceImpl<E extends BaseEntity, R extends JpaRepository<E, Long>> implements IBaseEntityService<E>{
 
     private final R repository;
+    private final Class<E> entityClass;
 
     @Autowired
-    public BaseEntityServiceImpl(R repository) {
+    public BaseEntityServiceImpl(R repository, Class<E> entityClass) {
         this.repository = repository;
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -31,11 +34,10 @@ public class BaseEntityServiceImpl<E extends BaseEntity, R extends JpaRepository
 
     @Override
     public E findById(long id) {
-        //TODO add dedicated exception
 
         Optional<E> e = repository.findById(id);
         if(e.isEmpty()) {
-            throw new RuntimeException("cannot find resource");
+            throw new BaseEntityNotFoundException(entityClass);
         }
         return e.get();
     }

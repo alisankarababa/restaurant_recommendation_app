@@ -11,7 +11,6 @@ public class UserServiceImpl extends BaseEntityServiceImpl<User, IUserRepository
 
     @Autowired
     public UserServiceImpl(IUserRepository repository) {
-        super(repository);
+        super(repository, User.class);
     }
-
 }

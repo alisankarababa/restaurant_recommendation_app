@@ -23,7 +23,7 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
     private final IRestaurantService restaurantService;
     @Autowired
     public ReviewServiceImpl(IReviewRepository repository, IUserService userService, IRestaurantService restaurantService) {
-        super(repository);
+        super(repository, Review.class);
         this.userService = userService;
         this.restaurantService = restaurantService;
     }
@@ -44,9 +44,7 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
     @Override
     public ReviewDto getReviewDtoByReviewId(long id) {
 
-        Review review = this.getRepository().findById( id )
-                .orElseThrow(() -> new RuntimeException("cannot find review"));
-
+        Review review = findById( id );
         User user = userService.findById( review.getUserId() );
         RestaurantDto restaurantDto = getRestaurant( review.getRestaurantId() );
 

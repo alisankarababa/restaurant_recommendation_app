@@ -1,7 +1,9 @@
 package com.tech.restaurant_service.service;
 
 import com.tech.common.enums.eRate;
+import com.tech.common.exception.ResourceNotFoundException;
 import com.tech.restaurant_service.entity.Restaurant;
+import com.tech.restaurant_service.enums.eRestaurantExceptionMessage;
 import com.tech.restaurant_service.repository.IRestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements IRestaurantService {
@@ -29,10 +32,11 @@ public class RestaurantServiceImpl implements IRestaurantService {
     @Override
     public Restaurant findById(String id) {
 
-        return restaurantRepository.findById( id )
-                .orElseThrow(
-                        () -> new RuntimeException( "cannot find restaurant" )
-                );
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findById( id );
+        if( optionalRestaurant.isEmpty() ) {
+            throw new ResourceNotFoundException( eRestaurantExceptionMessage.NOT_FOUND );
+        }
+        return optionalRestaurant.get();
     }
 
     @Override
