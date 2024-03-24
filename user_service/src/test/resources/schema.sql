@@ -8,7 +8,7 @@ create table review (
     created_date timestamp(6),
     id bigserial not null,
     last_modified_date timestamp(6),
-    restaurant_id varchar(36) not null,
+    restaurant_id varchar(20) not null,
     user_id bigint,
     rate varchar(50) not null check (rate in ('ONE','TWO','THREE','FOUR','FIVE')),
     comment varchar(400) not null,

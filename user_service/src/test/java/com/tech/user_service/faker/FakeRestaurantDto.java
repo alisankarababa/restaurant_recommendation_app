@@ -11,7 +11,7 @@ public class FakeRestaurantDto {
     public static RestaurantDto getSingleData() {
 
         return new RestaurantDto(
-                "9fc193e5-70d3-47ba-b551-f5cd6baf16e4",
+                "8FU0MwbQ6UCUHfxg1hjO",
                 "fake restaurant name",
                 35.3567,
                 28.7671,
