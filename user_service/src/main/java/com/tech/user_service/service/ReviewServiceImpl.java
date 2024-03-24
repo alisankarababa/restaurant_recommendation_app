@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepository> implements IReviewService {
 
@@ -56,6 +57,7 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
     public void update(long id, ReviewUpdateRequestBody requestBody) {
 
         Review review = findById( id );
+        conveyNewRateToRestaurantService( review.getRestaurantId(), review.getRate(), requestBody.rate() );
         IReviewMapper.INSTANCE.updateReviewFields(review, requestBody);
         save( review );
     }
@@ -65,8 +67,13 @@ public class ReviewServiceImpl extends BaseEntityServiceImpl<Review, IReviewRepo
         return getRestaurantDto( restResponseResponseEntity );
     }
 
+    private RestaurantDto conveyNewRateToRestaurantService(String restaurantId, eRate oldRate, eRate newRate) {
+        ResponseEntity<RestResponse<RestaurantDto>> responseEntity = restaurantService.updateRate( restaurantId, oldRate, newRate);
+        return getRestaurantDto( responseEntity );
+    }
+
     private RestaurantDto conveyRateToRestaurantService(String restaurantId, eRate rate) {
-        ResponseEntity<RestResponse<RestaurantDto>> responseEntity = restaurantService.rate( restaurantId, rate );
+        ResponseEntity<RestResponse<RestaurantDto>> responseEntity = restaurantService.rate( restaurantId, rate);
         return getRestaurantDto( responseEntity );
     }
 

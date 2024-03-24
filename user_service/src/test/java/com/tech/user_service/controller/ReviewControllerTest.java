@@ -100,6 +100,13 @@ class ReviewControllerTest extends ControllerTest {
         ReviewUpdateRequestBody reviewUpdateRequestBody = new ReviewUpdateRequestBody( eRate.FOUR, "It is a cozy place. I like the food." );
         String stringReviewUpdateRequestBody = objectMapper.writeValueAsString( reviewUpdateRequestBody );
 
+        RestaurantDto restaurantDto = FakeRestaurantDto.getSingleData();
+
+        Mockito.when( restaurantService.updateRate( Mockito.anyString(), Mockito.any( eRate.class ), Mockito.any( eRate.class ) ) )
+                .thenReturn(
+                        new ResponseEntity<>( RestResponse.ok( restaurantDto ), HttpStatus.OK )
+                );
+
         MvcResult mvcResult = mockMvc.perform( MockMvcRequestBuilders
                         .put( "/reviews/2002" )
                         .content( stringReviewUpdateRequestBody )

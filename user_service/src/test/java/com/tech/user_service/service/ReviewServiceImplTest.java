@@ -105,10 +105,18 @@ class ReviewServiceImplTest {
     void shouldUpdate() {
 
         Review review = FakeReview.getSingleData();
+        RestaurantDto restaurantDto = FakeRestaurantDto.getSingleData();
+
         ReviewUpdateRequestBody reviewUpdateRequestBody = new ReviewUpdateRequestBody( eRate.FIVE, "Definitely recommend this place!!" );
 
         Mockito.when( reviewRepository.findById( Mockito.anyLong() ) )
                         .thenReturn( Optional.of( review ) );
+
+        Mockito.when( restaurantService.updateRate( Mockito.anyString(), Mockito.any(eRate.class), Mockito.any(eRate.class) ) )
+                .thenReturn( new ResponseEntity<>(
+                        RestResponse.ok( restaurantDto ),
+                        HttpStatus.OK
+                ) );
 
         reviewServiceImpl.update( review.getId(), reviewUpdateRequestBody );
 

@@ -5,16 +5,16 @@ import com.tech.common.enums.eRate;
 import com.tech.common.response.RestResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "restaurant-service", url = "http://localhost:8081/restaurant-recommendation-app/api/restaurant-service")
+@FeignClient(name = "restaurant-service", url = "http://localhost:8081/restaurant-recommendation-app/api/restaurant-service/restaurants")
 public interface IRestaurantService {
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/rate")
     ResponseEntity<RestResponse<RestaurantDto>> rate(@PathVariable String id, @RequestParam eRate rate);
+
+    @PatchMapping("/{id}/rate")
+    public ResponseEntity<RestResponse<RestaurantDto>> updateRate(@PathVariable String id, @RequestParam eRate rate, @RequestParam eRate newRate);
 
     @GetMapping("/{id}")
     ResponseEntity<RestResponse<RestaurantDto>> findById(@PathVariable String id);
