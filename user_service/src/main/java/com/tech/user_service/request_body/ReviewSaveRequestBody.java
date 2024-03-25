@@ -7,11 +7,12 @@ import jakarta.validation.constraints.Size;
 
 public record ReviewSaveRequestBody(
 
-        @Min(value = 1, message = "User Id should be 1 at minimum.")
+        @Min( 1 )
         Long userId,
+        @Size(min = 20, max = 20, message = "restaurantId must be exactly 20 characters long")
         String restaurantId,
         eRate rate,
-        @Size(max = 400, message = "Comment should not be longer than 400 characters")
+        @Size(max = 400)
         String comment
 ) {
 }
