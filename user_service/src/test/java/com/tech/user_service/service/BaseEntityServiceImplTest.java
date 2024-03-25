@@ -1,8 +1,8 @@
 package com.tech.user_service.service;
 
-import com.tech.user_service.exception.BaseEntityNotFoundException;
 import com.tech.user_service.faker.ConcreteBaseEntity;
 import com.tech.user_service.faker.FakeConcreteBaseEntity;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class BaseEntityServiceImplTest {
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
 
         //then
-        Assertions.assertThrows( BaseEntityNotFoundException.class, () -> baseEntityService.findById(35));
+        Assertions.assertThrows( EntityNotFoundException.class, () -> baseEntityService.findById(35));
     }
 
     @Test

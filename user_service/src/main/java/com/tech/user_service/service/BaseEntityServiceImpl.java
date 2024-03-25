@@ -1,7 +1,7 @@
 package com.tech.user_service.service;
 
 import com.tech.user_service.entity.BaseEntity;
-import com.tech.user_service.exception.BaseEntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,7 +37,7 @@ public class BaseEntityServiceImpl<E extends BaseEntity, R extends JpaRepository
 
         Optional<E> e = repository.findById(id);
         if(e.isEmpty()) {
-            throw new BaseEntityNotFoundException(entityClass);
+            throw new EntityNotFoundException(entityClass.getSimpleName() + " not found.");
         }
         return e.get();
     }

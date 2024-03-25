@@ -21,6 +21,13 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler
+    public ResponseEntity<RestResponse<ExceptionDto>> hEntityNotFoundException(EntityNotFoundException exception, WebRequest webRequest) {
+
+        ExceptionDto exceptionDto = getExceptionDto(exception, webRequest);
+        return new ResponseEntity<>(RestResponse.error(exceptionDto), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
     ResponseEntity<RestResponse<ExceptionDto>> hTechException(TechException exc, WebRequest webRequest) {
         ExceptionDto exceptionDTO = getExceptionDto(exc, webRequest);
         return new ResponseEntity<>(RestResponse.error(exceptionDTO), exc.getHttpStatus());
