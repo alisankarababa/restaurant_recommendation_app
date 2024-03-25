@@ -8,6 +8,7 @@ import com.tech.restaurant_service.mapper.IRestaurantMapper;
 import com.tech.restaurant_service.request_body.RestaurantRequestBody;
 import com.tech.restaurant_service.service.IRestaurantService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,10 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RestResponse<RestaurantDto>> findById(@PathVariable String id) {
+    public ResponseEntity<RestResponse<RestaurantDto>> findById(
+            @PathVariable
+            @Size(min = 20, max = 20, message = "Id must be exactly 20 characters long")
+            String id) {
         Restaurant restaurant = restaurantService.findById( id );
         RestaurantDto restaurantDto = IRestaurantMapper.INSTANCE.restaurantToRestaurantDto( restaurant );
         return new ResponseEntity<>( RestResponse.ok( restaurantDto ), HttpStatus.OK );
@@ -54,7 +58,11 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> update(@PathVariable String id, @RequestBody @Valid RestaurantRequestBody requestBody) {
+    public ResponseEntity<RestResponse<Void>> update(
+            @PathVariable
+            @Size(min = 20, max = 20, message = "Id must be exactly 20 characters long")
+            String id,
+            @RequestBody @Valid RestaurantRequestBody requestBody) {
 
         Restaurant restaurant = restaurantService.findById( id );
         IRestaurantMapper.INSTANCE.updateRestaurant( restaurant, requestBody );
@@ -63,13 +71,13 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RestResponse<Void>> delete(@PathVariable String id) {
+    public ResponseEntity<RestResponse<Void>> delete(@PathVariable @Size(min = 20, max = 20, message = "Id must be exactly 20 characters long") String id) {
         restaurantService.deleteById( id );
         return new ResponseEntity<>( RestResponse.noContent(), HttpStatus.NO_CONTENT );
     }
 
     @PatchMapping("/{id}/rate")
-    public ResponseEntity<RestResponse<RestaurantDto>> rate(@PathVariable String id, @RequestParam eRate rate, @RequestParam(required = false) eRate newRate) {
+    public ResponseEntity<RestResponse<RestaurantDto>> rate(@PathVariable @Size(min = 20, max = 20, message = "Id must be exactly 20 characters long") String id, @RequestParam eRate rate, @RequestParam(required = false) eRate newRate) {
 
         Restaurant restaurant =
                 newRate == null ?
