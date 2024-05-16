@@ -74,10 +74,8 @@ public class RestaurantServiceImpl implements IRestaurantService {
 
         Restaurant restaurant = findById( id );
 
-        Integer reviewCount = restaurant.getReviewCount();
         Integer accumulatedRating = restaurant.getAccumulatedRating();
 
-        restaurant.setReviewCount( reviewCount + 1 );
         restaurant.setAccumulatedRating( accumulatedRating - oldRate.getRate() + newRate.getRate() );
 
         return save( restaurant );
